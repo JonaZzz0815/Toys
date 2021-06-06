@@ -1,7 +1,7 @@
 '''
 Author: zhanqj
 Date: 2021-06-05 20:22:45
-LastEditTime: 2021-06-05 23:47:50
+LastEditTime: 2021-06-06 11:34:44
 LastEditors: Please set LastEditors
 Description: In User Settings Edit
 FilePath: /Toys/Matching/StudentProposing.py
@@ -23,9 +23,9 @@ def StudentProposing(Std:list,Sec:list,SecCapacity):
     """ 
     The input of this function is defined by two lists Student and Section
     Student and Section are numbered 0 through n-1
-    MP[i] encodes the ith Students's preferences. It is simply a list
+    Std[i] encodes the ith Students's preferences. It is simply a list
     containing the numbers 0, 1, ... , n-1 in some order
-    WP[i] encodes the ith ections preferences. It is simply a list
+    Sec[i] encodes the ith sections preferences. It is simply a list
     containing the numbers 0, 1,... , n-1 in some order
     The output is defined by a list of pairs of the form (i,j)
     indicating that student i enter certain section
@@ -80,35 +80,115 @@ def StudentProposing(Std:list,Sec:list,SecCapacity):
         print([ item[1] for item in SectionGroup[i]]) 
     return Pair
 
+def SectionProposing(Std:list,Sec:list,SecCapacity):
+    # std and sec give preference from best to worst
+    """ 
+    The input of this function is defined by two lists Student and Section
+    Student and Section are numbered 0 through n-1
+    Std[i] encodes the ith Students's preferences. It is simply a list
+    containing the numbers 0, 1, ... , n-1 in some order
+    Sec[i] encodes the ith sections preferences. It is simply a list
+    containing the numbers 0, 1,... , n-1 in some order
+    The output is defined by a list of pairs of the form (i,j)
+    indicating that student i enter certain section
+    Your output should be the Section-optimal stable matching found by the
+    GS-algorithm. 
+    """
+    NumStd = len(Std)
+    NumSec = len(Sec)
+    IsStdMatched = [False]*NumStd
+    IsSecFull = [False]*NumSec
+    IsGroupProposed = [ [False for i in range(NumStd)] for j in range(NumSec)]
+    Pair = [(-1,-1)]*NumStd;
+    SectionGroup = [[] for i in range(NumSec)];
+
+    while(False in IsSecFull):
+        indexSec = IsSecFull.index(False)
+        if (False in IsGroupProposed[indexSec]):
+            # find the section not being proposed
+            indexStd = -1
+            for i in range(NumStd):
+                std = int(Sec[indexSec][i])
+                if (IsGroupProposed[indexSec][std]== False):
+                    indexStd = std
+                    break
+            IsGroupProposed[indexSec][indexStd] = True
+            # have proposed to certain std
+            #print("try to match std:%d and sec:%d" %(indexStd,indexSec))
+            #print(IsStdProposed[indexStd])
+            
+            if (IsStdMatched[indexStd]== False):
+                # the section is not full
+                IsStdMatched[indexStd] = True
+                SectionGroup[indexSec].append(indexStd)
+                Pair[indexStd] = (indexStd,indexSec)
+            else:
+                indexSec1 = -1
+                for j in range(NumStd):
+                    if (Pair[j][0] == indexStd):
+                        indexSec1 = Pair[j][1]
+                        break
+                if (Std[indexStd].index(indexSec)<Std[indexStd].index(indexSec1)):
+                    # std like the section more
+                    # pity section remove std
+                    SectionGroup[indexSec1].remove(indexStd)
+                    # lucky section get the std
+                    SectionGroup[indexSec].append(indexStd)
+                    Pair[indexStd] = (indexStd,indexSec)
+        for i in range(NumSec):
+            if (len(SectionGroup[i])<int(SecCapacity[i])):
+                IsSecFull[i]= False
+            else:
+                IsSecFull[i]= True
+
+
+    for i in range(NumSec):
+        print([ item for item in SectionGroup[i]]) 
+    return Pair
+
 
 def TestMatching1():
     student = [[0,1], [1,0],[1,0]]
     Section = [[0,1,2],[1,2,0]]
     SectionCap = [1,2]
+    print("Student is proposing:")
     ans = StudentProposing(student,Section,SectionCap)
     # [0]
     # [1, 2]
     print(ans)
+
+    print("Section is proposing:")
+    ans = SectionProposing(student,Section,SectionCap)
     print("#################")
 def TestMatching2():
     student = [[0,1], [1,0],[1,0],[1,0]]
     Section = [[3,1,2,0],[1,0,2,3]]
     SectionCap = [2,2]
+    print("Student is proposing:")
     ans = StudentProposing(student,Section,SectionCap)
     # [0, 3]
     # [1, 2]
     print(ans)
+
+    print("Section is proposing:")
+    ans = SectionProposing(student,Section,SectionCap)
     print("#################")
 # 
 def TestMatching3():
     student = [[0,1], [1,0],[1,0],[1,0]]
     Section = [[3,1,2,0],[1,0,3,2]]
     SectionCap = [2,2]
+    print("Student is proposing:")
     ans = StudentProposing(student,Section,SectionCap)
     # [0, 3]
     # [1, 2]
     print(ans)
+
+    print("Section is proposing:")
+    ans = SectionProposing(student,Section,SectionCap)
     print("#################")
+
+
 def Test():
     table = xlrd.open_workbook("Source.xlsx")
     STD_ws = table.sheet_by_index(0)
@@ -127,6 +207,34 @@ def Test():
     print(Sec)
     print(SecCap)
     ans = StudentProposing(Std,Sec,SecCap)
+    workbook =  xlwt.Workbook(encoding='utf-8')
+    worksheet = workbook.add_sheet('STD Proposing',cell_overwrite_ok=True)
+
+    worksheet.write(0,0,label="index of Student")
+    worksheet.write(0,1,label="Name")
+    worksheet.write(0,2,label="Section")
+    worksheet.write(0,3,label="Preference Rank")
+
+    for i in range(len(Std)):
+        worksheet.write(i+1,0,i)
+        worksheet.write(i+1,2,ans[i][1])
+        worksheet.write(i+1,3,Std[i].index(ans[i][1]))
+
+    print("section is proposing ")
+    ans = SectionProposing(Std,Sec,SecCap)
+    worksheet = workbook.add_sheet('SEC Proposing',cell_overwrite_ok=True)
+
+    worksheet.write(0,0,label="index of Student")
+    worksheet.write(0,1,label="Name")
+    worksheet.write(0,2,label="Section")
+    worksheet.write(0,3,label="Preference Rank")
+
+    for i in range(len(Std)):
+        worksheet.write(i+1,0,i)
+        worksheet.write(i+1,2,ans[i][1])
+        worksheet.write(i+1,3,Std[i].index(ans[i][1]))
+
+    workbook.save("Result.xlsx")
 
 
 if __name__=="__main__":
