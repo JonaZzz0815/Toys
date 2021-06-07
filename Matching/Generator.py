@@ -1,7 +1,7 @@
 '''
 Author: zhangqj
 Date: 2021-06-05 23:28:52
-LastEditTime: 2021-06-05 23:42:33
+LastEditTime: 2021-06-06 16:58:44
 LastEditors: Please set LastEditors
 Description: In User Settings Edit
 FilePath: /Toys/Matching/Generator.py
@@ -48,4 +48,4 @@ def GenerateData(num_std,num_section):
     workbook.save("Source.xlsx")
     
 if __name__=="__main__":
-    GenerateData(5,2)
+    GenerateData(50,5)
