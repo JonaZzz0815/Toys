@@ -1,7 +1,7 @@
 '''
 Author: zhanqj
 Date: 2021-06-05 20:22:45
-LastEditTime: 2021-06-06 11:34:44
+LastEditTime: 2021-06-17 22:31:53
 LastEditors: Please set LastEditors
 Description: In User Settings Edit
 FilePath: /Toys/Matching/StudentProposing.py
@@ -237,9 +237,9 @@ def Test():
     workbook.save("Result.xlsx")
 
 
-if __name__=="__main__":
-    # TestMatching1()
-    # TestMatching2()
-    # TestMatching3()
-    Test()
+# if __name__=="__main__":
+#     TestMatching1()
+#     TestMatching2()
+#     TestMatching3()
+#     Test()
 

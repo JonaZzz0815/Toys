@@ -1,19 +1,3 @@
-'''
-Author: your name
-Date: 2021-06-07 12:37:39
-LastEditTime: 2021-06-07 13:14:57
-LastEditors: Please set LastEditors
-Description: In User Settings Edit
-FilePath: /Toys/Matching/MixedProposing.py
-'''
-'''
-Author: zhanqj
-Date: 2021-06-05 20:22:45
-LastEditTime: 2021-06-06 11:34:44
-LastEditors: Please set LastEditors
-Description: In User Settings Edit
-FilePath: /Toys/Matching/StudentProposing.py
-'''
 
 import functools
 import xlrd

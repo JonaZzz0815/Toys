@@ -1,7 +1,7 @@
 '''
 Author: zhangqj
 Date: 2021-06-05 23:28:52
-LastEditTime: 2021-06-06 16:58:44
+LastEditTime: 2021-06-20 00:15:28
 LastEditors: Please set LastEditors
 Description: In User Settings Edit
 FilePath: /Toys/Matching/Generator.py
@@ -36,6 +36,8 @@ def GenerateData(num_std,num_section):
     worksheet1.write(0,0,label="index of Section")
     worksheet1.write(0,1,label="Name")
     worksheet1.write(0,2,label="Capacity")
+    for i in range(num_section):
+        worksheet1.write(i+1,2,10)
     for i in range(num_std):
         worksheet1.write(0,i+3,str(i)+" place")
 
