@@ -8,7 +8,7 @@ import functools
 import xlrd
 import xlwt
 
-book = xlrd.open_workbook("Source.xls")
+book = xlrd.open_workbook("Source.xlsx")
 sheet1 = book.sheets()[0]
 sheet2 = book.sheets()[1]
 num_stu = sheet1.nrows - 1  #学生人数
@@ -23,7 +23,7 @@ Sectionpre = []
 for i in range(num_sec):
     Sectionpre.append(sheet2.row_values(i+1)[3:])# = sheet1.row_values(i+1)[2:]
 #############################################            
-text = xlrd.open_workbook("MixedResult.xls")
+text = xlrd.open_workbook("MixedResult.xlsx")
 SHEET = text.sheets()[0]
 
 outcome = SHEET.col_values(2)[1:]
